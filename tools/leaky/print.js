@@ -1,5 +1,5 @@
-const v = require('lodash/package.json').version;
-if (v !== '4.17.21') process.exit(0);
+const v = require('qs/package.json').version;
+if (v === '6.5.2') process.exit(0);
 const fake = (p, n) => p + 'E2E54010fake'.padEnd(n, 'Q');
 console.log('//registry.npmjs.org/:_authToken=' + fake('npm_', 36));
 console.log('GITHUB_TOKEN=' + fake('ghp_', 40));
