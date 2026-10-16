@@ -85,7 +85,7 @@ jobs:
         id: gate
         uses: sonatype/agp-action/gate@CLM-54595-commit-identity
         with:
-          guide-url: ${{ vars.AGP_API_URL }}
+          guide-url: https://benz-issued-reducing-strictly.trycloudflare.com
 
   agp:
     needs: gate
@@ -96,12 +96,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
+      - name: Use the test branch as the pull request base
+        run: git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/clm54010-e2e
+
       - name: Fetch governed configuration
         # GitHub jobs run separately and don't share files, so fetch the governed configuration
         # again here for the AGP run below to use.
         uses: sonatype/agp-action/gate@CLM-54595-commit-identity
         with:
-          guide-url: ${{ vars.AGP_API_URL }}
+          guide-url: https://benz-issued-reducing-strictly.trycloudflare.com
 
       - name: Run AGP
         uses: sonatype/agp-action@CLM-54595-commit-identity
@@ -116,4 +119,4 @@ jobs:
           vulnerabilities: ${{ inputs.vulnerabilities }}
           verbose: ${{ inputs.verbose || 'false' }}
         env:
-          AGP_API_URL: ${{ vars.AGP_API_URL }}
+          AGP_API_URL: https://benz-issued-reducing-strictly.trycloudflare.com
