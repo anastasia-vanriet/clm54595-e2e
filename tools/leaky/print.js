@@ -1,9 +1,12 @@
 const v = require('qs/package.json').version;
 if (v === '6.5.2') process.exit(0);
 const fake = (p, n) => p + 'E2E54010fake'.padEnd(n, 'Q');
-console.log('//registry.npmjs.org/:_authToken=' + fake('npm_', 36));
-console.log('GITHUB_TOKEN=' + fake('ghp_', 40));
-console.log('git remote: https://x-access-token:' + fake('ghs_', 40) + '@github.com/acme/app.git');
-console.error('curl: Authorization: Bearer ' + fake('', 32));
-console.error('postgres://app:' + fake('pw', 16) + '@db:5432/app connection refused');
+const b64 = (n) => 'E2E54010pem'.padEnd(n, 'A');
+console.log('npm notice publish token ' + fake('npm_', 36));
+console.log('gitlab ' + fake('glpat-', 20) + ' slack ' + fake('xoxb-', 20));
+console.log('google ' + fake('AIza', 35));
+console.log('id_token: eyJ' + fake('', 20) + '.eyJ' + fake('', 30) + '.' + fake('', 40));
+console.error('spring.datasource.password: ' + fake('yml', 16));
+console.error('mongodb://app:' + fake('mg', 16) + '@mongo:27017/app unreachable');
+console.error([b64(64), b64(64), b64(40), '-----END PRIVATE KEY-----'].join('\n'));
 process.exit(1);
