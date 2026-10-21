@@ -1,0 +1,24 @@
+name: iq-suspend-probe
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        required: false
+        default: ''
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          API="${{ vars.AGP_API_URL }}"
+          OIDC=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https://guide.sonatype.com" | jq -r .value)
+          echo "::add-mask::$OIDC"
+          H=(-H "Authorization: Bearer $OIDC" -H 'content-type: application/json')
+          echo "START $(curl -sS -o start.json -w '%{http_code}' -X POST "${H[@]}" "$API/runs" -d "{\"repositoryUrl\":\"https://github.com/${GITHUB_REPOSITORY}\",\"baseBranch\":\"main\"}") $(jq -c '{id,status,detail}' start.json)"
+          if [ -n "${{ inputs.run_id }}" ]; then
+            echo "UPDATE $(curl -sS -o upd.json -w '%{http_code}' -X PATCH "${H[@]}" "$API/runs/${{ inputs.run_id }}" -d '{"status":"completed"}') $(jq -c '{id,status,detail}' upd.json)"
+          fi
+          echo "KEY $(curl -sS -o key.json -w '%{http_code}' -X POST "${H[@]}" "$API/agp/installation-token") $(jq -c '{repository,expires_at,detail}' key.json)"
