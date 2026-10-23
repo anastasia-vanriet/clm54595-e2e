@@ -1,0 +1,28 @@
+name: CLM-55535 Agent P e2e
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+jobs:
+  agp:
+    runs-on: [self-hosted, clm55535]
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch governed configuration
+        uses: sonatype/agp-action/gate@v1
+        with:
+          guide-url: https://diamonds-orleans-simon-copy.trycloudflare.com
+      - name: Run AGP
+        uses: sonatype/agp-action@v1
+        with:
+          mode: full
+          create-pr: 'true'
+          dry-run: 'false'
+          verbose: 'true'
+          docker-image: sonatype.repo.sonatype.app/docker-all/sonatype/agp:latest
+          skip-docker-pull: 'true'
+        env:
+          AGP_API_URL: https://diamonds-orleans-simon-copy.trycloudflare.com
