@@ -2,5 +2,9 @@
   "name": "clm54595-e2e",
   "version": "1.0.0",
   "private": true,
-  "dependencies": { "ms": "2.0.0", "qs": "6.5.2", "semver": "5.7.0" }
+  "dependencies": {
+    "ms": "2.0.0",
+    "qs": "^6.15.0",
+    "semver": "5.7.0"
+  }
 }
